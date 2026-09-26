@@ -1,0 +1,13 @@
+# Local editor and operating-system files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+*.log
+*.tmp
+
+# Local test outputs, if created later
+tests/artifacts/
