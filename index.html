@@ -4,9 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>PM₂.₅ Mortality and Avoidable Burden at the WHO Guideline</title>
-    <link rel="icon" href="data:," />
+    <meta name="description" content="Explore 2020–2023 estimates of adult PM₂.₅-attributable mortality and potential annual deaths avoided at the WHO guideline, by country and city-centered area.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PM₂.₅ Health Benefits">
+<meta property="og:title" content="PM₂.₅ Mortality and Avoidable Burden at the WHO Guideline">
+<meta property="og:description" content="Explore 2020–2023 estimates of adult PM₂.₅-attributable mortality and potential annual deaths avoided at the WHO guideline, by country and city-centered area.">
+<meta property="og:locale" content="en_US">
+<link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
     <link rel="stylesheet" href="./styles.css" /><link rel="stylesheet" href="./site.css" /><script src="./site.js" defer></script>
-  </head>
+  <link rel="canonical" href="https://yifeiiii0129.github.io/PM2.5/">
+<meta property="og:url" content="https://yifeiiii0129.github.io/PM2.5/">
+<meta property="og:image" content="https://yifeiiii0129.github.io/PM2.5/assets/share-preview.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="PM₂.₅ Health Benefits: a world map of potential health benefits at the WHO guideline. Estimates for adults aged 25+, 2023.">
+<meta name="twitter:card" content="summary_large_image">
+</head>
   <body><a class="skip-link" href="#main">Skip to content</a><header class="site-header"><a class="brand" href="./index.html">PM<sub>2.5</sub><span>Health Benefits</span></a><button class="nav-toggle" type="button" aria-controls="siteNav" aria-expanded="false">Menu</button><nav id="siteNav" aria-label="Main navigation"><a href="./index.html" aria-current="page">Explore</a><a href="./methods.html" >Methods</a><a href="./data.html" >Data</a><a href="./about.html" >About</a></nav></header>
     <main class="app" id="main">
       <header class="topbar">
@@ -15,14 +29,14 @@
           <h1>What could cleaner air mean for health?</h1>
           <p class="title-subtitle">Explore potential annual deaths avoided by reducing outdoor PM<sub>2.5</sub> to the WHO guideline of 5 μg/m<sup>3</sup>.</p>
         </div>
-        <div class="top-actions">
+        <div class="top-actions" role="group" aria-label="Year and age filters">
           <label class="select-control">
             <span>Year</span>
             <select id="yearSelect"></select>
           </label>
           <label class="select-control" id="ageControl">
             <span>Age</span>
-            <select id="ageSelect"></select>
+            <select id="ageSelect" aria-describedby="ageContext"></select>
             <small id="ageContext" class="control-note"></small>
           </label>
         </div>
@@ -62,7 +76,7 @@
             </div>
             <div id="mapTooltip" class="map-tooltip" role="tooltip" hidden></div>
           </div>
-          <label class="window-toggle"><input type="checkbox" id="showModeledArea" checked disabled> Show modeled area <span id="windowToggleNote">Select a city</span></label><p class="map-projection-note">
+          <p id="mapLayerNotice" class="resource-notice" role="status" hidden>Some supplementary map boundaries could not be loaded. <button id="mapLayerRetry" class="button" type="button">Retry</button></p><label class="window-toggle"><input type="checkbox" id="showModeledArea" checked disabled> Show modeled area <span id="windowToggleNote">Select a city</span></label><p class="map-projection-note">
             Map displayed using the Robinson projection; geographic calculations were performed on the original latitude–longitude grid.
           </p>
         </div>
@@ -72,10 +86,10 @@
             <div class="picker-search-field">
               <label for="countrySearch"><span>Search country</span></label>
               <div class="search-input-wrap">
-                <input id="countrySearch" list="countrySearchOptions" placeholder="e.g., China" />
+                <input id="countrySearch" aria-describedby="countrySearchNotice" list="countrySearchOptions" placeholder="e.g., China" />
                 <button id="clearCountry" class="search-clear" type="button" aria-label="Clear selected country" title="Clear selected country" hidden>×</button>
               </div>
-              <datalist id="countrySearchOptions"></datalist>
+              <datalist id="countrySearchOptions"></datalist><p id="countrySearchNotice" class="search-notice" role="status" hidden></p>
             </div>
             <label>
               <span>Country</span>
@@ -84,14 +98,14 @@
             <div class="picker-search-field">
               <label for="citySearch"><span>Search city</span></label>
               <div class="search-input-wrap">
-                <input id="citySearch" list="citySearchOptions" placeholder="e.g., Beijing" />
+                <input id="citySearch" aria-describedby="citySearchNotice" list="citySearchOptions" placeholder="e.g., Beijing" />
                 <button id="clearCity" class="search-clear" type="button" aria-label="Clear selected city" title="Clear selected city" hidden>×</button>
               </div>
-              <datalist id="citySearchOptions"></datalist>
+              <datalist id="citySearchOptions"></datalist><p id="citySearchNotice" class="search-notice" role="status" hidden></p>
             </div>
             <label>
               <span>City</span>
-              <select id="cityPicker" disabled></select>
+              <select id="cityPicker" aria-describedby="cityAvailability" disabled></select><small id="cityAvailability" class="control-note" hidden></small>
             </label>
           </div>
 
@@ -114,7 +128,7 @@
               <span id="pm25Label">Mean PM<sub>2.5</sub> concentration</span>
               <strong id="pm25">--</strong>
             </div>
-            <div class="metric metric-primary">
+            <div class="metric">
               <span id="rateLabel">PM₂.₅-attributable deaths per 100,000 adults 25+</span>
               <strong id="currentRate">--</strong>
               <small id="currentRateInterval" class="uncertainty">--</small>
@@ -166,6 +180,7 @@
         };
 
         retry.addEventListener("click", () => window.location.reload());
+        document.querySelector("#mapLayerRetry").addEventListener("click", () => window.location.reload());
         window.addEventListener(
           "error",
           (event) => {

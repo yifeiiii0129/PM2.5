@@ -1,0 +1,96 @@
+/* Methods-only editorial layout; shared visual tokens come from styles.css. */
+.methods-page .method-layout {
+  grid-template-columns: 184px minmax(0, 1fr);
+  gap: var(--space-8);
+}
+.methods-page .method-body { min-width: 0; max-width: 72ch; }
+.methods-page .page-lead { margin-bottom: var(--space-8); }
+.methods-page .method-section {
+  margin: 0;
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: var(--space-4);
+}
+.methods-page .method-section:first-child { padding-top: 0; border-top: 0; }
+.methods-page .method-section h2 {
+  margin: 0 0 var(--space-4);
+  color: var(--ink);
+  font-size: var(--text-section);
+  font-weight: 600;
+  line-height: 1.3;
+  text-wrap: pretty;
+}
+.methods-page .method-section p,
+.methods-page .method-section li,
+.methods-page .method-section dd {
+  color: #47584f;
+  font-size: var(--text-body);
+  line-height: 1.75;
+}
+.methods-page .method-section p { margin: 0 0 var(--space-4); }
+.methods-page .method-section > :last-child { margin-bottom: 0; }
+.methods-page .method-section strong { font-weight: 600; color: var(--ink); }
+.methods-page .method-section a { overflow-wrap: anywhere; }
+.methods-page .method-section dl { margin: 0 0 var(--space-6); }
+.methods-page .method-section dt {
+  margin: var(--space-6) 0 var(--space-2);
+  color: var(--accent-dark);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.methods-page .method-section dt:first-child { margin-top: 0; }
+.methods-page .method-section dd { margin: 0; }
+.methods-page .method-section ol,
+.methods-page .method-section ul { margin: 0 0 var(--space-4); padding-left: var(--space-6); }
+.methods-page .method-section li { padding-left: var(--space-1); margin-bottom: var(--space-3); }
+.methods-page .method-section li:last-child { margin-bottom: 0; }
+.methods-page .method-steps li::marker { color: var(--accent-dark); font-weight: 600; }
+.methods-page .method-section .method-assumption { border-left: 2px solid var(--line); padding-left: var(--space-3); }
+.methods-page .method-note {
+  border-left: 3px solid #c0d9cc;
+  border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  padding: var(--space-3) var(--space-4);
+  background: #eef7f3;
+}
+.methods-page .method-equation {
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--panel);
+}
+.methods-page .equation-expression {
+  display: inline-block;
+  margin: var(--space-2) 0;
+  color: var(--ink);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.methods-page .scientific-quantity { white-space: nowrap; }
+.methods-page .references li { font-size: var(--text-label); line-height: 1.7; margin-bottom: var(--space-4); }
+.methods-page .references li:target { background: #eef7f3; }
+.methods-page .method-toc {
+  gap: 0;
+  padding: 0 0 0 var(--space-3);
+  border-left: 1px solid var(--line);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+.methods-page .method-toc strong { padding: var(--space-2); margin: 0 0 var(--space-1); font-size: var(--text-helper); color: var(--muted); font-weight: 600; }
+.methods-page .method-toc a { display: flex; align-items: center; min-height: 40px; padding: var(--space-2); border-radius: var(--radius-control); line-height: 1.5; }
+.methods-page .method-toc a:hover { background: #e7eeea; text-decoration: underline; }
+.methods-page .method-toc a:focus-visible { outline-offset: -2px; }
+@media (max-width: 980px) {
+  .methods-page .method-layout { grid-template-columns: minmax(0, 1fr); gap: var(--space-8); }
+  .methods-page .method-body { width: 100%; }
+  .methods-page .method-toc { max-width: 72ch; max-height: none; overflow: visible; padding: 0 0 var(--space-4); border-left: 0; border-bottom: 1px solid var(--line); gap: 0 var(--space-4); }
+  .methods-page .method-toc strong { padding-left: 0; }
+  .methods-page .method-toc a { min-height: var(--control-height); padding-left: 0; }
+}
+@media (max-width: 600px) {
+  .methods-page .method-layout { gap: var(--space-6); }
+  .methods-page .method-toc { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--space-3); }
+  .methods-page .method-toc strong { grid-column: 1 / -1; }
+  .methods-page .method-section { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+  .methods-page .method-note, .methods-page .method-equation { padding: var(--space-3); }
+}

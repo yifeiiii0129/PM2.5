@@ -19,7 +19,7 @@ function renderAgeSummaryTable(country) {
     return `<tr${ageKey === group.key ? ' class="selected-age"' : ''}><th scope="row">${escapeHtml(group.label)}</th><td>${formatDeaths(metric.currentDeaths)}</td><td>${formatDeaths(metric.avoidableDeaths)}</td><td>${formatPercent(metric.avoidableShare)}</td></tr>`;
   }).join('');
   const total = country.ages.post25;
-  els.ageBreakdown.innerHTML = `<table class="data-table age-summary"><caption class="sr-only">Annual PM₂.₅-attributable deaths by age</caption>${header}<tbody>${rows}</tbody><tfoot><tr><th scope="row">25+ total</th><td>${formatDeaths(total.currentDeaths)}</td><td>${formatDeaths(total.avoidableDeaths)}</td><td>${formatPercent(total.avoidableShare)}</td></tr></tfoot></table>`;
+  els.ageBreakdown.innerHTML = `<table class="data-table age-summary ${showDetailedAges ? 'age-detailed' : 'age-reduced'}"><caption>${showDetailedAges ? 'Detailed age groups · 5-year bands; 80+' : 'Summary age groups · 25–49, 50–69, 70+'}</caption>${header}<tbody>${rows}</tbody><tfoot><tr><th scope="row">25+ total</th><td>${formatDeaths(total.currentDeaths)}</td><td>${formatDeaths(total.avoidableDeaths)}</td><td>${formatPercent(total.avoidableShare)}</td></tr></tfoot></table>`;
 }
 
 function drawModeledArea() {
@@ -96,9 +96,9 @@ function renderComparison() {
     : 'Select a location, then choose “Add to comparison”.';
   if (!entries.length) { target.innerHTML = '<div class="comparison-empty">Your selected locations will appear here.</div>'; return; }
   const head = entries.map(({ ref, name }) => `<th scope="col"><span>${escapeHtml(name)}</span><button class="remove-location" data-key="${escapeHtml(locationKey(ref))}" aria-label="Remove ${escapeHtml(name)} from comparison">Remove</button></th>`).join('');
-  const row = (label, getter) => `<tr><th scope="row">${label}</th>${entries.map((entry) => `<td>${entry.item ? getter(entry) : 'Unavailable for this year'}</td>`).join('')}</tr>`;
+  const row = (label, getter, rowClass = 'comparison-numeric') => `<tr class="${rowClass}"><th scope="row">${label}</th>${entries.map((entry) => `<td>${entry.item ? getter(entry) : 'Unavailable for this year'}</td>`).join('')}</tr>`;
   target.innerHTML = `<table class="data-table comparison-table"><caption class="sr-only">Location comparison for ${year}, adults aged 25+</caption><thead><tr><th scope="col">Measure</th>${head}</tr></thead><tbody>` +
-    row('Geographic scope', (e) => e.ref.kind === 'city' ? 'City-centered window' : 'Country / area') +
+    row('Geographic scope', (e) => e.ref.kind === 'city' ? 'City-centered window' : 'Country / area', 'comparison-description') +
     row('Avoidable deaths / year', (e) => `<strong>${formatDeaths(e.metric.avoidableDeaths)}</strong>`) +
     row('Current PM₂.₅-attributable deaths / year', (e) => formatDeaths(e.metric.currentDeaths)) +
     row('Avoidable share of PM₂.₅-attributable deaths', (e) => formatPercent(e.metric.avoidableShare)) +

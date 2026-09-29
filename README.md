@@ -176,3 +176,33 @@ node --check site.js
 发布前后检查四页导航、地图、年龄分组、城市窗口、年份切换、四地点比较、CSV 下载、手机布局及页面返回时的状态保留。当前数据与原网站估计一致，本次整理没有重新计算死亡结果。
 
 Before and after publication, check all four pages, the map, age groups, city footprints, year changes, four-location comparisons, CSV downloads, mobile layout and state restoration when returning to Explore. Existing health estimates are preserved; this release preparation does not recalculate mortality.
+
+
+## 本轮上线说明 / Deployment notes for this update
+
+目标地址 / Target: https://yifeiiii0129.github.io/PM2.5/
+
+本轮已按此地址配置四页 canonical、Open Graph 和分享图片。大小写必须保持 `PM2.5`。首页筛选参数仍可分享，但 canonical 不包含筛选参数。
+The four pages use this base URL for canonical and Open Graph metadata. Preserve the `PM2.5` capitalization. Explore filter URLs remain shareable; canonical URLs omit filters.
+
+### 上传 / Upload
+
+1. 打开 GitHub 的 `yifeiiii0129/PM2.5` 仓库，确认当前 Pages 发布分支和目录。
+   Open `yifeiiii0129/PM2.5` and check the Pages publishing branch and folder.
+2. 将本目录的内容上传到发布目录，与现有 `index.html` 同级；不要再套一层 `pm25_v1`。保留现有 Git 历史。
+   Upload this directory's contents into the publishing folder, alongside `index.html`, without an extra `pm25_v1` wrapper. Preserve Git history.
+3. 本轮更新：`index.html`, `methods.html`, `data.html`, `about.html`, `app.js`, `site.css`, `README.md`；新增：`assets/favicon.svg`, `assets/share-preview.png`。其他数据文件没有修改，已有同版本数据时无需重复上传。
+   These are the changed/new files. Scientific datasets are unchanged and do not need re-uploading if the deployed copies already match.
+4. 部署完成后检查四页、搜索错误提示、分享图片 URL，以及原有筛选链接。网站本轮尚未由本地工具发布。
+   After deployment, verify all four pages, search feedback, the share-image URL and existing filter URLs. This local update has not been published by the tools.
+
+### 性能核查 / Performance check
+
+旧版目标站点两个大文件已返回 `Content-Encoding: gzip` 和 `Cache-Control: max-age=600`：结果数据 2,477,184 bytes，地图边界 5,274,092 bytes，合计约 7.75 MB。这是现有线上资源的响应头，不是新版发布后的测速。本轮没有声称缩短首屏时间；按年份加载仍是下一项独立优化。
+The existing live resources already return gzip encoding and a 600-second cache lifetime: 2,477,184 bytes for results and 5,274,092 bytes for boundaries, approximately 7.75 MB combined. These are response headers for the existing deployment, not a speed measurement of this update. No first-load speed improvement is claimed in this patch; loading data by year remains a separate next step.
+
+上线后重新检查 `Content-Encoding`、`Cache-Control`、浏览器 Network 中的传输体积和首次可交互时间。不要仅上传 `.gz` 文件就认为已启用压缩。
+After deployment, recheck encoding/cache headers, transferred bytes and time until the map can be used. Uploading a `.gz` file alone does not configure HTTP compression.
+
+参考 / Reference: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Compression
+分享字段 / Sharing metadata: https://ogp.me/

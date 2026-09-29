@@ -675,7 +675,17 @@ function selectCityById(cityId, options = {}) {
   if (options.zoom !== false || document.querySelector("#showModeledArea").checked) zoomToCity(city);
 }
 
+function clearSearchNotice(kind) {
+  const input = document.querySelector(`#${kind}Search`);
+  const notice = document.querySelector(`#${kind}SearchNotice`);
+  input.removeAttribute("aria-invalid");
+  notice.hidden = true;
+  notice.textContent = "";
+}
+
 function updateClearButtons() {
+  clearSearchNotice("country");
+  clearSearchNotice("city");
   els.clearCountry.hidden = !els.countrySearch.value.trim();
   els.clearCity.hidden = !els.citySearch.value.trim();
 }
@@ -860,6 +870,9 @@ function populateCities() {
   const scoped = selectedCountry ? cities().filter((d) => d.iso3 === selectedCountry.iso3) : cities();
   const sorted = scoped.slice().sort((a, b) => (b.population || 0) - (a.population || 0));
   els.city.disabled = !selectedCountry || !scoped.length;
+  const availability = document.querySelector("#cityAvailability");
+  availability.hidden = !selectedCountry || Boolean(scoped.length);
+  availability.textContent = availability.hidden ? "" : "No city estimates are available for this country.";
   els.city.innerHTML = `<option value="">Select…</option>${sorted
     .map((d) => `<option value="${d.id}">${cityName(d)}</option>`)
     .join("")}`;
@@ -986,6 +999,8 @@ function refresh() {
 }
 
 function pickFromSearch(mapForInput, value, picker) {
+  const kind = mapForInput === countrySearchMap ? "country" : "city";
+  clearSearchNotice(kind);
   const exact = mapForInput.get(normalizeText(value));
   if (exact) {
     picker(exact);
@@ -994,7 +1009,15 @@ function pickFromSearch(mapForInput, value, picker) {
   const query = normalizeText(value);
   if (!query) return;
   const match = [...mapForInput.entries()].find(([label]) => label.includes(query));
-  if (match) picker(match[1]);
+  if (match) {
+    picker(match[1]);
+  } else {
+    const notice = document.querySelector(`#${kind}SearchNotice`);
+    const selected = selectedCity ? cityName(selectedCity) : selectedCountry ? countryName(selectedCountry) : null;
+    notice.textContent = `No matching ${kind} found${kind === "city" && selectedCountry ? " in the selected country" : ""}. ${selected ? `Still showing ${selected}.` : "No location is selected."}`;
+    notice.hidden = false;
+    document.querySelector(`#${kind}Search`).setAttribute("aria-invalid", "true");
+  }
 }
 
 function initEvents() {
@@ -1058,7 +1081,12 @@ async function init() {
   renderMapLayout();
   let json = window.WB_ADMIN0_GEOJSON;
   if (!json) {
-    const response = await fetch("./geo/wb_admin0_simplified.geojson");
+    let response;
+    try {
+      response = await fetch("./geo/wb_admin0_simplified.geojson");
+    } catch (error) {
+      throw new Error("Map boundaries could not be downloaded. Check your connection and choose Retry.", { cause: error });
+    }
     if (!response.ok) throw new Error(`Boundary request failed with HTTP ${response.status}.`);
     json = await response.json();
   }
@@ -1078,6 +1106,7 @@ async function init() {
   renderMapLayout();
   initEvents();
   initFeatureEvents();
+  document.querySelector("#mapLayerNotice").hidden = Boolean(window.WB_NDLSA_GEOJSON?.features?.length);
   window.PM25_UI?.showReady();
 }
 
