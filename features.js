@@ -52,7 +52,7 @@ function updateFeaturePanel() {
   const toggle = document.querySelector('#showModeledArea');
   toggle.disabled = !city;
   document.querySelector('#windowToggleNote').textContent = city ? 'Blue cells = modeled footprint' : 'Select a city';
-  document.querySelector('#pm25Label').textContent = city ? 'Population-weighted mean PM₂.₅' : 'Area-weighted mean PM₂.₅';
+  document.querySelector('#pm25Label').textContent = 'Population-weighted mean PM₂.₅';
   const age = DATA.ageGroups.concat(DATA.summaryAgeGroups).find((group) => group.key === ageKey)?.label || '25+';
   document.querySelector('#rateLabel').textContent = `PM₂.₅-attributable deaths per 100,000 people aged ${city ? '25+' : age.replace(' (total)', '')}`;
   if (city) {
@@ -76,6 +76,7 @@ function updateFeaturePanel() {
   document.querySelector('#downloadSelection').disabled = !ref;
   els.sizeLegend.hidden = !selectedCountry;
   document.querySelector('#sizeLegendCaption').hidden = !selectedCountry;
+  document.querySelector('#sizeScaleNote').hidden = !selectedCountry;
   els.ageTableWrap.classList.toggle('is-hidden', !!city || !!selectedCountry?.virtual);
 }
 
@@ -92,18 +93,18 @@ function renderComparison() {
   document.querySelector('#downloadComparison').disabled = !entries.length;
   document.querySelector('#clearComparison').disabled = !entries.length;
   document.querySelector('#comparisonStatus').textContent = entries.length
-    ? `${entries.length} of 4 locations · ${year} · adults 25+${entries.length === 4 ? ' · Remove a location to add another.' : ''}`
+    ? `${entries.length} of 4 locations · ${year} · mortality: adults 25+${entries.length === 4 ? ' · Remove a location to add another.' : ''}`
     : 'Select a location, then choose “Add to comparison”.';
   if (!entries.length) { target.innerHTML = '<div class="comparison-empty">Your selected locations will appear here.</div>'; return; }
   const head = entries.map(({ ref, name }) => `<th scope="col"><span>${escapeHtml(name)}</span><button class="remove-location" data-key="${escapeHtml(locationKey(ref))}" aria-label="Remove ${escapeHtml(name)} from comparison">Remove</button></th>`).join('');
   const row = (label, getter, rowClass = 'comparison-numeric') => `<tr class="${rowClass}"><th scope="row">${label}</th>${entries.map((entry) => `<td>${entry.item ? getter(entry) : 'Unavailable for this year'}</td>`).join('')}</tr>`;
-  target.innerHTML = `<table class="data-table comparison-table"><caption class="sr-only">Location comparison for ${year}, adults aged 25+</caption><thead><tr><th scope="col">Measure</th>${head}</tr></thead><tbody>` +
+  target.innerHTML = `<table class="data-table comparison-table"><caption class="sr-only">Location comparison for ${year}; mortality: adults aged 25+; concentrations: all-age population weights</caption><thead><tr><th scope="col">Measure</th>${head}</tr></thead><tbody>` +
     row('Geographic scope', (e) => e.ref.kind === 'city' ? 'City-centered window' : 'Country / area', 'comparison-description') +
     row('Avoidable deaths / year', (e) => `<strong>${formatDeaths(e.metric.avoidableDeaths)}</strong>`) +
     row('Current PM₂.₅-attributable deaths / year', (e) => formatDeaths(e.metric.currentDeaths)) +
     row('Avoidable share of PM₂.₅-attributable deaths', (e) => formatPercent(e.metric.avoidableShare)) +
     row('Avoidable deaths per 100,000 adults 25+', (e) => formatRate(e.metric.avoidableRatePer100k)) +
-    row('Mean PM₂.₅ (μg/m³)', (e) => `${formatOne(e.item.pm25)}<small>${e.ref.kind === 'city' ? 'Population-weighted' : 'Area-weighted'}</small>`) +
+    row('Mean PM₂.₅ (μg/m³)', (e) => `${formatOne(e.item.pm25)}<small>Population-weighted</small>`) +
     row('Population aged 25+', (e) => formatNumber(e.ref.kind === 'city' ? e.item.population25PlusInWindow : e.metric.populationDenominator)) +
     row('Modeled area (km²)', (e) => formatNumber(e.ref.kind === 'city' ? e.item.windowAreaKm2 : e.item.fractionalLandAreaKm2)) +
     '</tbody></table>';
@@ -136,7 +137,8 @@ function exportLocation(ref, selectedAge = 'post25') {
     year, location: entry.name, locationType: ref.kind, id: ref.id, iso3: entry.item.iso3,
     ageGroup: ageLabel, scenarioPm25UgM3: 5,
     spatialScope: city ? 'City-centered model window, not city administrative boundaries' : 'World Bank country / area aggregation',
-    pm25UgM3: entry.item.pm25, pm25Weighting: city ? 'population' : 'area',
+    pm25UgM3: entry.item.pm25, populationWeightedPm25UgM3: entry.item.pm25, pm25Weighting: 'population',
+    pm25PopulationBasis: 'all ages', pm25PopulationYear: 2020,
     populationDenominator: city ? entry.item.population25PlusInWindow : metric.populationDenominator,
     modeledAreaKm2: city ? entry.item.windowAreaKm2 : entry.item.fractionalLandAreaKm2,
     currentDeaths: metric.currentDeaths, avoidableDeaths: metric.avoidableDeaths,
@@ -144,7 +146,7 @@ function exportLocation(ref, selectedAge = 'post25') {
     avoidableShare: metric.avoidableShare,
     avoidableDeathsLow: metric.avoidableDeathsLow, avoidableDeathsHigh: metric.avoidableDeathsHigh,
     intervalNote: metric.avoidableDeathsLow == null ? 'Not calculated for merged age groups' : 'Source GEMM parameter bounds; not full uncertainty',
-    populationYear: 2020, ageStructureYear: 2015, source: 'Duke PM2.5 Health Benefits v1.0.0; GEMM with GBD NCD+LRI baseline mortality',
+    populationYear: 2020, ageStructureYear: 2015, source: `Duke PM2.5 Health Benefits v${DATA.version}; GEMM with GBD NCD+LRI baseline mortality`,
   };
 }
 

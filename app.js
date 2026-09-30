@@ -406,7 +406,7 @@ function countryTooltip(country, fallbackName) {
 }
 
 function cityTooltip(city) {
-  return `<strong>${cityName(city)}</strong><span>3 × 3 city-centered window; adults 25+ only<br>Circle is not a city boundary or the window footprint<br>Population-weighted PM₂.₅: ${formatOne(city.pm25)} μg/m³<br>Attributable mortality rate: ${formatRate(city.currentRatePer100k)} per 100,000<br>${formatInterval(city.currentRatePer100kLow, city.currentRatePer100kHigh, formatRate)}<br>Avoidable rate at 5 μg/m³: ${formatRate(city.avoidableRatePer100k)} per 100,000<br>Attributable deaths/year: ${formatDeaths(city.currentDeaths, city.currentRatePer100k)}<br>Avoidable deaths/year: ${formatDeaths(city.avoidableDeaths, city.avoidableRatePer100k)}<br>Avoidable share: ${formatPercent(city.avoidableShare)}<br>Actual window area: ${formatArea(city.windowAreaKm2)}</span>`;
+  return `<strong>${cityName(city)}</strong><span>3 × 3 city-centered window; mortality: adults 25+<br>Circle is not a city boundary or the window footprint<br>Population-weighted PM₂.₅ (all ages): ${formatOne(city.pm25)} μg/m³<br>Attributable mortality rate: ${formatRate(city.currentRatePer100k)} per 100,000<br>${formatInterval(city.currentRatePer100kLow, city.currentRatePer100kHigh, formatRate)}<br>Avoidable rate at 5 μg/m³: ${formatRate(city.avoidableRatePer100k)} per 100,000<br>Attributable deaths/year: ${formatDeaths(city.currentDeaths, city.currentRatePer100k)}<br>Avoidable deaths/year: ${formatDeaths(city.avoidableDeaths, city.avoidableRatePer100k)}<br>Avoidable share: ${formatPercent(city.avoidableShare)}<br>Actual window area: ${formatArea(city.windowAreaKm2)}</span>`;
 }
 
 function showMapTooltip(html, event, anchor = null) {
@@ -897,7 +897,7 @@ function renderPanel() {
   const metric = useCity ? cityMetric(selectedCity) : countryMetric(selectedCountry);
   els.age.disabled = useCity;
   els.ageControl.classList.toggle("city-age-locked", useCity);
-  els.ageContext.textContent = useCity ? "Cities: adults 25+ only" : "";
+  els.ageContext.textContent = useCity ? "City mortality: adults 25+" : "";
   els.ageTableWrap.classList.toggle("is-hidden", useCity);
   updateClearButtons();
   els.modeTitle.textContent = selectedCountry ? "City-centered area estimates" : "Country view";
@@ -905,7 +905,7 @@ function renderPanel() {
     ? "Circle color shows the avoidable share of PM₂.₅-attributable deaths; size shows scaled avoidable deaths/year. Circles mark city coordinates and do not represent boundaries or window area."
     : "Country color shows the share of PM₂.₅-attributable deaths avoidable at 5 μg/m³ for the selected age group. Select a country to show city-centered metropolitan region estimates.";
   els.selectionType.textContent = useCity
-    ? "City-centered 3 × 3 window, adults 25+"
+    ? "City-centered 3 × 3 window · mortality: adults 25+"
     : selectedCountry
       ? "Country"
       : "Select a country or city";

@@ -42,7 +42,10 @@
         </div>
       </header>
 
-      <p class="scope-note">Adults 25+ · Population fixed at 2020; age structure fixed at 2015. <a href="./methods.html#ages">Why this age range?</a></p><section class="workspace">
+      <section id="mobileLocationSearch" class="mobile-location-search" aria-label="Find a location" hidden><h2>Find a location</h2></section>
+      <p class="scope-note">Mortality: adults 25+ · Population fixed at 2020; age structure fixed at 2015. <a href="./methods.html#ages">Why this age range?</a></p>
+      <p class="methods-summary"><strong>How we estimate health benefits:</strong> We combine outdoor PM₂.₅ exposure, population and GBD baseline mortality rates with GEMM to estimate annual deaths attributable to PM₂.₅ and potentially avoided at the WHO guideline among adults aged 25+. These are modeled estimates; city results cover a 3 × 3 grid window around each city center, rather than administrative city boundaries. <a href="./methods.html">Methods and limitations →</a></p>
+      <section class="workspace">
         <div class="map-shell">
           <div class="map-toolbar">
             <div>
@@ -60,6 +63,7 @@
               <span class="legend-caption">Color: share of PM₂.₅-attributable deaths avoidable</span>
               <div class="legend-row legend-size-row" id="sizeLegend"></div>
               <span id="sizeLegendCaption" class="legend-caption">Circle size: avoidable deaths/year (scaled symbols)</span>
+              <span id="sizeScaleNote" class="legend-caption" hidden>Circle radii use square-root scaling, with a minimum size to keep small estimates visible. <a href="./methods.html#map-symbols">About circle sizes</a></span>
             </div>
           </div>
           <div id="map" aria-label="World PM₂.₅ mortality map" aria-busy="true">
@@ -125,8 +129,9 @@
 
           <div class="metric-grid">
             <div class="metric">
-              <span id="pm25Label">Mean PM<sub>2.5</sub> concentration</span>
-              <strong id="pm25">--</strong>
+              <span id="pm25Label">Population-weighted mean PM<sub>2.5</sub></span>
+              <strong id="pm25" aria-describedby="pm25Context">--</strong>
+              <small id="pm25Context" class="uncertainty">All ages · 2020 population weights. <a href="./methods.html#concentrations">How this is averaged</a></small>
             </div>
             <div class="metric">
               <span id="rateLabel">PM₂.₅-attributable deaths per 100,000 adults 25+</span>
@@ -152,7 +157,7 @@
         </aside>
       </section>
 
-      <section class="comparison-section" id="comparison"><div class="section-heading"><div><p class="eyebrow">Side by side</p><h2>Compare locations</h2></div><div class="button-row"><button id="downloadComparison" class="button" disabled>Download comparison</button><button id="clearComparison" class="button" disabled>Clear all</button></div></div><p>Compare up to four locations in the selected year. All values below use <strong>adults aged 25+</strong>, regardless of the map age filter.</p><p id="comparisonStatus" role="status" aria-live="polite">Select a location, then choose “Add to comparison”.</p><div id="comparisonTable" class="table-scroll"></div><p class="small-note">City windows may overlap; do not add them together. Country and city concentration averages use different weighting. <a href="./methods.html#city-windows">Understand the geography</a>.</p></section><section class="explore-note"><h2>Read the map with confidence</h2><p>Color shows the share of <strong>PM₂.₅-attributable deaths</strong> that could be avoided, not the share of all deaths. City results describe modeled areas around city centers, not city boundaries.</p><a href="./methods.html">How the estimates work →</a></section>
+      <section class="comparison-section" id="comparison"><div class="section-heading"><div><p class="eyebrow">Side by side</p><h2>Compare locations</h2></div><div class="button-row"><button id="downloadComparison" class="button" disabled>Download comparison</button><button id="clearComparison" class="button" disabled>Clear all</button></div></div><p>Compare up to four locations in the selected year. Mortality values below use <strong>adults aged 25+</strong>, regardless of the map age filter. Mean PM₂.₅ concentrations use the total population of all ages.</p><p id="comparisonStatus" role="status" aria-live="polite">Select a location, then choose “Add to comparison”.</p><div id="comparisonTable" class="table-scroll"></div><p class="small-note">City windows may overlap; do not add them together. Country and city concentrations both use population weighting over their respective modeled areas. <a href="./methods.html#city-windows">Understand the geography</a>.</p></section><section class="explore-note"><h2>Read the map with confidence</h2><p>Color shows the share of <strong>PM₂.₅-attributable deaths</strong> that could be avoided, not the share of all deaths. City results describe modeled areas around city centers, not city boundaries.</p><a href="./methods.html">How the estimates work →</a></section>
     </main><footer class="site-footer"><span>Duke University · PM₂.₅ Health Benefits</span><a href="./methods.html#limitations">Scope &amp; limitations</a><a href="./data.html">Download data</a></footer>
 
     <script>

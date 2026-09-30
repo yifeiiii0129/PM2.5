@@ -94,3 +94,17 @@
   .methods-page .method-section { padding-top: var(--space-6); padding-bottom: var(--space-6); }
   .methods-page .method-note, .methods-page .method-equation { padding: var(--space-3); }
 }
+
+/* Native disclosures retain keyboard support without extra scripts. */
+.methods-page .method-reading-note { margin: -16px 0 28px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.methods-page .method-details { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius-control); background: #f8fbf9; }
+.methods-page .method-details summary { min-height: 44px; padding: 12px 16px; color: var(--accent-dark); font-size: 14px; font-weight: 600; line-height: 1.6; cursor: pointer; overflow-wrap: anywhere; }
+.methods-page .method-details summary::marker { color: var(--accent-dark); }
+.methods-page .method-details summary:hover { background: #eef7f3; }
+.methods-page .method-details summary:focus-visible { outline: 2px solid var(--accent-dark); outline-offset: 3px; border-radius: var(--radius-control); }
+.methods-page .method-details[open] summary { border-bottom: 1px solid var(--line); }
+.methods-page .method-details-body { padding: 16px; min-width: 0; }
+.methods-page .method-details-body > :last-child { margin-bottom: 0; }
+@media (max-width: 600px) {
+  .methods-page .method-details summary, .methods-page .method-details-body { padding: 12px; }
+}

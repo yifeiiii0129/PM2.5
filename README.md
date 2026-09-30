@@ -1,101 +1,101 @@
-# PM₂.₅ Health Benefits — v1.0.0
-# PM₂.₅ 健康收益网站 — 第一版
+# PM₂.₅ Health Benefits — v1.1.0
 
-独立静态网站，用于探索 2020–2023 年室外 PM₂.₅ 降至 WHO 年均指南值 5 μg/m³ 时，25 岁及以上成人的潜在死亡减少收益。本目录是新 `pm2.5` 仓库的第一版网站文件，可直接部署，不需要旧版本目录或后端。
+中文与 English · Release and deployment guide
 
-An independent static website exploring potential reductions in annual mortality among adults aged 25+ if outdoor PM₂.₅ were reduced to the WHO annual guideline of 5 μg/m³, using estimates for 2020–2023. This directory contains the first website release for the new `pm2.5` repository. It can be deployed directly without earlier version folders or an application backend.
+探索 2020–2023 年室外 PM₂.₅ 降至 WHO 年均指南值 **5 μg/m³** 时，成人 **25+** 的潜在年度死亡减少收益。支持国家及城市中心窗口查询、年龄组查看、最多四地点比较与 CSV 下载。
 
-版本号 / Version: **1.0.0**. This is a prepared release; publication and Git tagging are separate steps. / 此版本已整理就绪，线上发布和 Git 标签需另行操作。
+Explore potential annual deaths avoided among adults aged **25+** if outdoor PM₂.₅ were reduced to the WHO annual guideline of **5 μg/m³**, using estimates for 2020–2023. Browse countries and city-centered windows, inspect age groups, compare up to four locations and download CSV data.
 
-**团队 / Team:** Drew Shindell · Yifei Yan · Qianru Zhang — Duke University
+**Team / 团队:** Drew Shindell · Yifei Yan · Qianru Zhang — Duke University
 
-## 1. 本地运行 / Run locally
+- Website / 网站：[PM₂.₅ Health Benefits](https://yifeiiii0129.github.io/PM2.5/)
+- Repository / 仓库：[yifeiiii0129/PM2.5](https://github.com/yifeiiii0129/PM2.5)
+- Version / 文件版本：**1.1.0**；建议 Git 标签 / recommended Git tag：**v1.1.0**
+- Publication / 发布状态：本文件描述准备发布的版本；是否已上线请以 GitHub 提交、Release 和 Pages 部署记录为准。This document describes the prepared release; commits, Releases and Pages deployment records determine publication status.
 
-在此目录启动服务器，然后访问 [本地网站 / Local website](http://127.0.0.1:8765/)：
+## 1. 1.1.0 与 1.0.0 的区别 / Changes from 1.0.0
 
-Start a server from this directory, then open the local website:
+这里的 1.0.0 指本次人口加权修改前保留的本地发布快照；没有假定远程仓库已经存在 `v1.0.0` 标签。上传前请核对仓库当前内容。版本号统一写为 `1.0.0`、`1.1.0`，而不是 `1.00`。
 
-```bash
-python -B -m http.server 8765 --bind 127.0.0.1
-```
+The baseline is the saved local release snapshot from before the population-weighting update. This comparison does not assume that a remote `v1.0.0` tag exists. Check the repository before uploading.
 
-如果端口已被使用，可改为 8766，并访问对应地址。使用期间保持服务器运行。
-
-If the port is occupied, use 8766 and open the corresponding address. Keep the server running while using the site.
-
-也可直接打开 `index.html`；推荐 HTTP 方式，以获得更一致的导航、状态保存和下载行为。网站运行不需要数据库、Node.js 或 Python 数据分析库；上述 Python 命令只用于提供本地 HTTP 服务。
-
-Opening `index.html` directly is also possible; HTTP is recommended for consistent navigation, state and downloads. The website does not require a database, Node.js or Python analysis libraries. The Python command above only serves local files over HTTP.
-
-## 2. 页面与功能 / Pages and features
-
-| 文件 / File | 中文说明 | English description |
+| 项目 / Item | 1.0.0 | 1.1.0 |
 | --- | --- | --- |
-| `index.html` | 地图首页、地点/年份/年龄选择、城市窗口、结果下载和最多四地点比较 | Explore: map, selectors, city footprints, downloads and comparison of up to four locations |
-| `methods.html` | 指标、来源、计算、年龄范围、地理范围、参数区间和局限 | Indicators, sources, calculation, age/geographic scope, parameter bounds and limitations |
-| `data.html` | 国家和城市 CSV 下载及字段说明 | Country/city CSV downloads and data dictionary |
-| `about.html` | 项目目的和团队 | Project purpose and team |
-| `styles.css` | 原地图界面基础样式 | Base map-interface styling |
-| `site.css` / `site.js` | 公共导航和响应式布局 | Shared navigation and responsive layout |
-| `app.js` | 地图与交互逻辑 | Map and interaction logic |
-| `features.js` | 年龄表、窗口、比较、CSV 导出和 URL 状态 | Age table, footprints, comparison, CSV export and URL state |
+| 国家平均浓度 / National mean PM₂.₅ | 面积加权 / Area-weighted | GPW 2020 全年龄人口加权，使用 World Bank 边界人口分配比例 / Weighted by GPW 2020 total population allocated using World Bank boundary population fractions |
+| 城市平均浓度 / City mean PM₂.₅ | 人口加权 / Population-weighted | 保持原值，重新核验 / Values retained and verified |
+| 年龄口径 / Age scope | 部分文字笼统标注 25+ / Some descriptions broadly stated 25+ | 明确死亡为 25+，浓度权重为全年龄 / Mortality covers 25+; concentration weights cover all ages |
+| 国家 CSV / Country CSV | `areaWeightedPm25UgM3` | `populationWeightedPm25UgM3` |
+| 单地点、比较导出 / Selection and comparison exports | 通用浓度字段及原加权标识 / Generic concentration field and original weighting labels | 保留 `pm25UgM3`，新增统一浓度字段和人口口径元数据 / Retain the generic field and add the common concentration field and population metadata |
+| 手机、平板搜索 / Compact-screen search | 地图下方 / Below the map | 屏幕宽度 ≤980px 时移到地图前；桌面仍在右侧 / Before the map at widths ≤980px; desktop controls stay on the right |
+| 首页方法摘要 / Homepage methods summary | 没有集中摘要 / No consolidated summary | 两句话概括数据、GEMM、成人范围及城市窗口 / Two sentences covering data, GEMM, adult scope and city windows |
+| 圆点缩放 / Circle scaling | 仅标注 scaled symbols / Labeled as scaled symbols | 解释平方根缩放、最小圆点尺寸及年度标尺 / Explain square-root scaling, minimum radius and annual scale |
+| Methods 阅读方式 / Methods reading flow | 技术细节全部展开 / All details expanded | 直观解释默认显示，五组技术内容可展开 / Plain-language explanations remain visible; five groups of technical details expand on demand |
+| 浓度重建 / Concentration rebuild | 无独立发布版重建脚本 / No release-specific rebuild script | 新增 `tools/rebuild_population_pm25.py` / Added rebuild script |
 
-四页均使用相对链接，可放在同一个子目录发布。只有 Explore 加载模型数据和地图依赖。URL 保存年份、地点、年龄、详细分组开关、窗口显示和比较地点；从其他页面返回时，在可用的情况下利用会话存储恢复选择。
+### 1.1 数据结果变化 / Changes to data
 
-All four pages use relative links and can be published in one subdirectory. Only Explore loads model data and map dependencies. The URL preserves the year, location, age, age-detail toggle, footprint visibility and comparisons. Links back from other pages restore the selection using session storage where available.
+- 重算 **952 个国家／地区—年份浓度**：238 个区域 × 2020–2023 四年；同步更新 **3,808 行国家 CSV**。
+- 复核 **5,720 个城市—年份浓度**：1,430 个城市窗口 × 四年，原值保留。
+- 死亡人数、可避免死亡、死亡率、可避免比例、年龄分组及地图几何保持原结果。它们按逐网格暴露计算，地区平均浓度只是展示用的汇总指标。
 
-## 3. 数据与解释 / Data and interpretation
+Recalculated **952 national concentration means** and updated **3,808 country CSV rows**. Verified all **5,720 city-year means** while retaining their values. Mortality, avoidable deaths, rates, avoidable shares, age groups and geography retain their existing results. Mortality calculations use grid-level exposure rather than the displayed regional mean.
 
-### 年龄分组 / Age groups
+2023 年示例 / Examples for 2023, μg/m³:
 
-- 默认国家分组为 **25–49、50–69、70+**，另列 **25+ 总计**。原始五岁分组及 80+ 可展开查看。
-- 合并人数为原始分组之和；死亡率和可避免比例使用合并分子、分母重新计算。不要把 25+ 总计再次加到细分组中。舍入可能造成微小加总差异。
-- 新合并年龄组不生成新的不确定区间。原始低/高字段表述为 GEMM 参数范围，不代表完整不确定性。
+| Country / 国家 | 1.0.0：面积加权 / Area-weighted | 1.1.0：人口加权 / Population-weighted |
+| --- | ---: | ---: |
+| China / 中国 | 24.604 | 33.115 |
+| United States / 美国 | 6.852 | 8.664 |
+| India / 印度 | 42.704 | 49.468 |
+| United Kingdom / 英国 | 6.964 | 7.851 |
 
-- Default country groups are **25–49, 50–69 and 70+**, with a separate **25+ total**. Original five-year groups and 80+ remain available in the detailed view.
-- Counts are summed; rates and avoidable shares are recalculated using combined numerators and denominators. Do not add the 25+ total to its component groups. Source rounding may cause small differences in sums.
-- Newly merged groups have no newly inferred uncertainty interval. Original low/high fields are described as GEMM parameter bounds, not full uncertainty.
+这些是加权方式变化，不能解释为两版之间污染实际增加。These differences reflect weighting methods, not a real-world increase in pollution between releases.
 
-### 下载与比较 / Downloads and comparison
+### 1.2 下载字段迁移 / CSV migration
 
-- 国家 CSV：**3,808 行**，即 4 年 × 238 个区域 × 4 个年龄选项。
-- 城市 CSV：**5,720 条城市年度记录**，覆盖 1,430 个窗口，均为 25+；沿用原始模型结果。
-- 网站不提供敏感性分析 CSV；原始分析仍保留在原项目目录。
-- 比较最多四个地点，全部使用 **25+** 并随年份更新，不跟随地图的细分年龄筛选。
+完整国家 CSV 将 `areaWeightedPm25UgM3` 改为 `populationWeightedPm25UgM3`；读取旧列名的分析脚本必须修改。这是需要注意的字段兼容性变化。城市 CSV 已经使用新列名，文件保持原样。
 
-- Country CSV: **3,808 rows** = 4 years × 238 areas × 4 age choices.
-- City CSV: **5,720 city-year records** for 1,430 windows, all aged 25+; preserving the source model results.
-- The sensitivity-analysis CSV is not offered on the website. The original analysis remains in its original project directory.
-- Comparison supports up to four locations, always uses **25+**, and follows the selected year rather than the map's narrower age filter.
+The full country CSV renames `areaWeightedPm25UgM3` to `populationWeightedPm25UgM3`. Scripts using the old name must be updated. The city CSV already uses the population-weighted field and is unchanged.
 
-### 地理范围与指标 / Geography and indicators
+单地点和比较下载 / Selection and comparison downloads:
 
-- 可避免比例 = 可避免死亡 ÷ 当前 PM₂.₅ 归因死亡，**不是占全部死亡的比例**。
-- 国家浓度按面积加权，城市窗口浓度按人口加权，界面分别标注。
-- 城市使用 0.25° 网格上最近格点及周围八格，并非行政边界；窗口可重叠，不能直接加总为区域总量。
-- 选中城市后可显示九格范围，并保留死亡人数圆；面板显示窗口面积和 25+ 人口。
-- 缺少原始区域总量的地区仍可用于寻找城市，但不会用城市窗口之和代替区域总量。
-- 所有年份固定使用 2020 年人口和 2015 年年龄结构，年际差异不是完整人口变化趋势。
+| Field | Meaning / 含义 |
+| --- | --- |
+| `populationWeightedPm25UgM3` | 人口加权平均浓度，μg/m³ / Population-weighted concentration |
+| `pm25UgM3` | 同一数值的兼容别名 / Retained alias for the same value |
+| `pm25Weighting` | `population` |
+| `pm25PopulationBasis` | `all ages` |
+| `pm25PopulationYear` | `2020` |
+| `ageGroup`, `populationDenominator` | 死亡指标的年龄组和人口分母，不能作为浓度权重分母 / Mortality age group and denominator, not the concentration denominator |
 
-- Avoidable share = avoidable deaths / current PM₂.₅-attributable deaths; it is **not the share of all deaths**.
-- Country concentrations are area-weighted; city-window concentrations are population-weighted, with explicit labels.
-- Cities use the nearest model cell and its eight neighbors on a 0.25° grid, not administrative boundaries. Windows can overlap and must not be summed into regional totals.
-- A selected city's nine-cell footprint can be displayed alongside its mortality circle, window area and population aged 25+.
-- Regions without an original total remain searchable for cities, but no regional total is synthesized from city windows.
-- Population is fixed at 2020 and age structure at 2015; annual differences do not represent complete demographic trends.
+### 1.3 已有功能与本轮范围 / Existing features and release scope
 
-`assets/data.js` 中的窗口边界依据原始未舍入城市坐标及模型预处理定义的格点中心生成，保持最近格点选择、经度环绕和纬度裁剪规则。所有窗口均与原始面积和格点数核对，该步骤不重算死亡人数。
+独立 Methods、Data、About 页面、合并年龄组、城市九格窗口、多地点比较和 CSV 下载均已在 1.0.0 存在，不是本轮新增。1.1.0 没有增加浓度地图、儿童健康结果或地图图片导出。
 
-Footprints in `assets/data.js` use original unrounded city coordinates and the grid centers defined by the model preprocessing, preserving nearest-cell selection, longitude wrapping and latitude clipping. All footprints are checked against source areas and cell counts; mortality is not recalculated.
+Separate Methods, Data and About pages, summary age groups, city footprints, location comparisons and CSV downloads already existed in 1.0.0. This release does not add a concentration map, child health outcomes or map-image export.
 
-## 4. 上传到新的 GitHub 仓库 / Upload to the new GitHub repository
+## 2. 科学解释 / Interpretation
 
-将本目录 **里面的所有文件和子目录** 上传到 `pm2.5` 仓库根目录；不要再套一层 `pm25_v1` 或 `version5`。`index.html` 必须直接位于仓库根目录。可整体上传本目录内容，其中只有 README、CHANGELOG、VERSION 和 .gitignore 不属于网页运行依赖，保留它们便于维护。
+- **Avoidable share:** 可避免死亡 ÷ 当前 PM₂.₅ 归因死亡，不是占全部死亡的比例。Avoidable deaths divided by current PM₂.₅-attributable deaths, not all deaths.
+- **Concentrations:** 国家和城市均使用固定 GPW 2020 全年龄人口权重；仅纳入有效浓度支持且人口为正的网格。Both use fixed GPW 2020 all-age population weights over valid, source-supported populated cells.
+- **Health model:** 使用 GEMM 和 GBD NCD+LRI 基线死亡率；不是直接下载的 GBD PM₂.₅ 死亡结果。GEMM with GBD NCD+LRI baseline mortality, not direct GBD PM₂.₅ mortality outputs.
+- **Ages:** 当前参数和输入覆盖成人 25+；浓度不随死亡年龄筛选变化。Current mortality inputs cover adults 25+; concentration is independent of the mortality age filter.
+- **Geography:** 国家按 World Bank 边界汇总；城市为 0.25° 网格上的 3×3 窗口，可能跨越边界或重叠，不能直接相加。Countries use World Bank boundaries; city windows may cross boundaries or overlap and should not be summed.
+- **Time:** 人口固定在 2020 年，年龄结构固定在 2015 年；年际变化不是完整人口趋势。Population and age structure are fixed at 2020 and 2015 respectively.
+- **Ranges:** GEMM 参数范围不是完整不确定性。GEMM parameter ranges do not capture all uncertainty.
 
-Upload **all files and subdirectories inside this directory** to the root of the `pm2.5` repository. Do not nest them under `pm25_v1` or `version5`. Keep `index.html` directly at the repository root. README, CHANGELOG, VERSION and .gitignore are maintenance files rather than runtime dependencies; keeping them is recommended.
+完整方法、来源及许可见 [Methods](methods.html)。See [Methods](methods.html) for sources, licenses and limitations.
+
+## 3. 需要上传哪些文件 / Files to upload
+
+### 推荐：完整更新当前发布目录 / Recommended: update the full release directory
+
+上传本目录里的文件和下列子目录，放到现有 Pages 发布目录，与现有 `index.html` 同级。**不要将外层 `pm25_v1` 文件夹整体套进去，也不要创建 `1.1.0/` 子目录。**保留仓库已有的 `.github/` 工作流、许可证等管理文件。
+
+Upload the contents of this directory into the existing Pages publishing directory, alongside `index.html`. Do not add a `pm25_v1/` or `1.1.0/` wrapper. Preserve existing repository workflows and administrative files.
 
 ```text
-pm2.5/
+PM2.5/
 ├── .gitignore
 ├── .nojekyll
 ├── README.md
@@ -105,13 +105,20 @@ pm2.5/
 ├── methods.html
 ├── data.html
 ├── about.html
-├── styles.css
-├── site.css
-├── site.js
 ├── app.js
 ├── features.js
+├── site.js
+├── styles.css
+├── site.css
+├── methods.css
+├── data-about.css
 ├── assets/
-│   └── data.js
+│   ├── data.js
+│   ├── favicon.svg
+│   └── share-preview.png
+├── downloads/
+│   ├── country_estimates_2020_2023.csv
+│   └── city_centered_estimates_2020_2023.csv
 ├── geo/
 │   ├── wb_admin0_simplified.js
 │   ├── wb_admin0_simplified.geojson
@@ -119,90 +126,145 @@ pm2.5/
 ├── vendor/
 │   ├── d3.v7.min.js
 │   └── d3-geo-projection.v4.min.js
-└── downloads/
-    ├── country_estimates_2020_2023.csv
-    └── city_centered_estimates_2020_2023.csv
+└── tools/
+    └── rebuild_population_pm25.py
 ```
 
-这里的 `d3-geo-projection.v4.min.js` 中 v4 是第三方库版本，不是本网站版本，不要改名。.nojekyll 用于直接发布静态资源；.gitignore 排除本机临时文件。GeoJSON 文件保留为现有边界脚本的加载备用。
+`tools/` 用于研究输入到发布数据的重建，不是网页运行依赖，建议随源码保留。`vendor/` 中的版本是第三方库版本，不要改名。`geo/*.geojson` 保留为边界加载备用。
 
-The `v4` in `d3-geo-projection.v4.min.js` is the third-party library version, not the website version; do not rename it. `.nojekyll` enables plain static publication, and `.gitignore` excludes local temporary files. The GeoJSON file is retained as the boundary-loading fallback.
+The rebuild tool is maintenance source, not a browser dependency. Keep third-party library filenames and the GeoJSON fallback unchanged.
 
-不需要上传整个研究项目、旧版本、模型输入输出或测试截图。本目录没有包含这些文件。保留第三方库原有版权/许可声明，数据来源与许可见 Methods 页面。
+**不要上传 / Exclude:** `__pycache__/`、`*.pyc`、测试截图、浏览器临时配置、`tmp/`、旧版本文件夹、原始 NetCDF 输入、整个研究项目。浏览器手动上传不会自动按 `.gitignore` 筛选，需自行避开这些文件。Manual browser uploads do not apply `.gitignore` automatically.
 
-The research project, earlier versions, model inputs/outputs and test screenshots are not needed and are not included here. Preserve third-party copyright/license notices; data sources and licenses are listed on Methods.
+### 仅上传变更文件 / Changed-files-only update
 
-## 5. 开启 GitHub Pages / Enable GitHub Pages
+仅在远程已完整保留同一份 1.0.0 依赖时使用以下清单。依据本地 1.0.0 快照比对，更新或新增这 **15 个文件**：
 
-在仓库中设置 / In the repository, configure:
+Use this list only if the repository already contains all matching 1.0.0 dependencies. Based on the local baseline, update or add these **15 files**:
+
+```text
+README.md
+CHANGELOG.md
+VERSION
+index.html
+methods.html
+data.html
+about.html
+app.js
+features.js
+site.js
+site.css
+methods.css
+assets/data.js
+downloads/country_estimates_2020_2023.csv
+tools/rebuild_population_pm25.py
+```
+
+**本次数据已经变化，必须上传 `assets/data.js` 和国家 CSV；只传 HTML/CSS 会出现新说明配旧数据。**
+
+**Both the JavaScript dataset and country CSV must be updated with the pages.**
+
+## 4. 上传步骤 / Upload steps
+
+1. 打开 [仓库](https://github.com/yifeiiii0129/PM2.5)，先查看 **Settings → Pages** 的实际发布分支和目录。下文以 `main`、`/(root)` 为例；若已有工作流或 `/docs` 配置，沿用实际配置。
+2. 在正确的分支和目录选择 **Add file → Upload files**。上传上述完整文件集，或按相同相对路径上传 15 个变更文件。文件夹路径要保持；例如 `assets/data.js` 必须进入 `assets/`。
+3. 提交说明建议：`Release v1.1.0: population-weighted concentrations and usability updates`。
+4. 提交后查看 Actions／Pages 部署结果，等待成功，再打开网站核验。
+5. 确认新网页、新数据和下载文件一致后，再创建下面的标签与 Release。
+
+Check the existing publishing source, upload files with their relative paths, commit the update, wait for Pages deployment and verify the live site before creating the release. GitHub Desktop is an alternative if browser folder uploads are inconvenient; open a clone of the existing repository and copy the release contents into its publishing directory, retaining its `.git` and workflows.
+
+分支部署的常见配置 / Typical branch-based configuration:
 
 ```text
 Settings → Pages
 Source: Deploy from a branch
-Branch: main (or your actual branch / 或实际分支)
+Branch: main
 Folder: /(root)
 ```
 
-保存后等待部署完成。若用户名为 `yifeiiii0129`、仓库名为 `pm2.5`，预期地址为：
+这是示例配置，不是已核实的远程设置。创建 Release 不会替代 Pages 配置，也不需要重新命名仓库。参考 [GitHub Pages publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)。
 
-Save and wait for deployment. For username `yifeiiii0129` and repository `pm2.5`, the expected URL is:
+This is an example, not a verified remote configuration. A Release does not replace Pages publishing configuration.
 
-```text
-https://yifeiiii0129.github.io/pm2.5/
+## 5. 怎样命名为 1.1.0 / Version, tag and Release
+
+三个名称各有用途 / These are separate:
+
+| Location / 位置 | Value / 值 | Purpose / 用途 |
+| --- | --- | --- |
+| `VERSION` 文件 | `1.1.0` | 源码版本标识，已设置 / Source version, already set |
+| Git tag | `v1.1.0` | 指向此次发布的提交 / Identifies the release commit |
+| GitHub Release title | `PM₂.₅ Health Benefits v1.1.0` | 供读者识别的发布名称 / Human-readable release title |
+
+README 和数据版本也已使用 1.1.0。**修改 `VERSION` 不会自动生成 Git 标签或 Release。**本地文件夹仍可叫 `pm25_v1`，仓库仍叫 `PM2.5`，网站地址也保持不变。
+
+README and dataset metadata already use 1.1.0. Editing `VERSION` does not create a tag or Release. Folder and repository names do not need to change.
+
+### GitHub 网页操作 / GitHub web interface
+
+1. 上传并核验更新后，打开仓库的 **Releases → Draft a new release**。
+2. 在标签选择器输入 **`v1.1.0`**，创建新标签。
+3. **Target** 选择包含本次全部更新的提交所在分支。若用 `main`，确认其最新提交就是要发布的版本；不要把标签指向旧版提交。
+4. **Release title** 填 **`PM₂.₅ Health Benefits v1.1.0`**。
+5. 说明粘贴下节发布说明，或使用 CHANGELOG 的 1.1.0 内容。
+6. 正式版不要选 **Set as a pre-release**；确认无误后点击 **Publish release**。
+
+After uploading, create a new Release with tag `v1.1.0`, target the updated commit/branch, enter the title and notes, and publish as a regular release. If the tag already exists, inspect its target before selecting it. Do not move a tag that already identifies a published release. See [GitHub: managing releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository).
+
+如果希望补一个 `v1.0.0`，它应指向更新前的旧提交，不能指向当前 1.1.0。已有旧标签则保留。If adding a historical `v1.0.0` tag, point it to the pre-update commit, not the new release.
+
+## 6. 可复制的发布说明 / Suggested release notes
+
+### 中文
+
+1.1.0 将国家平均 PM₂.₅ 从面积加权调整为人口加权，与城市窗口统一使用 GPW 2020 全年龄人口。重算 952 个国家—年份浓度，更新国家 CSV，并核验全部城市浓度。死亡人数、可避免比例和地理范围保持原结果。
+
+新增首页方法摘要和平方根缩放解释；手机和平板搜索入口移到地图前；Methods 将五组技术内容改为可展开阅读。同步更新页面、导出元数据和中英说明。
+
+**CSV 兼容性提醒：**国家浓度列由 `areaWeightedPm25UgM3` 改为 `populationWeightedPm25UgM3`，读取旧列名的脚本需要更新。
+
+### English
+
+Version 1.1.0 changes national mean PM₂.₅ from area weighting to population weighting, aligning countries and city windows with GPW 2020 all-age population weights. It recalculates 952 national means, updates the country CSV and verifies all city means. Mortality results, avoidable shares and geography are retained.
+
+The update adds a homepage methods summary and circle-scaling explanation, moves compact-screen location search ahead of the map, and introduces five expandable technical sections on Methods. Page wording, export metadata and documentation are aligned with the new concentration definition.
+
+**CSV compatibility:** the country concentration column is renamed from `areaWeightedPm25UgM3` to `populationWeightedPm25UgM3`. Update scripts that use the old name.
+
+## 7. 本地运行与上线核验 / Preview and verification
+
+在本目录运行 / From this directory:
+
+```powershell
+python -B -m http.server 8765 --bind 127.0.0.1
 ```
 
-该地址为预期地址，不表示已经上线。网站使用相对路径，不需要修改导航或数据路径；GitHub 无需执行 Python 构建。官方配置参考：[GitHub Pages publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)。
+打开 [local preview](http://127.0.0.1:8765/)。部署只需要静态文件，不需要在 GitHub 上运行 Python 或安装模型依赖。Serving the site does not require rebuilding the health model.
 
-This is an expected URL, not confirmation of publication. Relative links require no navigation/data path changes, and GitHub does not need to run a Python build. See the official publishing-source documentation above.
+本地已完成数据一致性检查、2020–2023 国家浓度重算、城市浓度复核、桌面／手机交互、下载、方法折叠与键盘操作检查。**上线后仍需核验部署的实际文件。**
 
-首次上传后，可在 GitHub Releases 中创建标签 `v1.0.0`，发布名称可用 `PM₂.₅ Health Benefits 1.0.0`。`VERSION` 文件只是版本标识，并不自动创建 Git 标签。以后升级继续使用 `app.js` 和 `features.js`，通过 Git 提交及标签记录版本。
+Local checks cover data consistency, concentration calculations, desktop/mobile interactions, downloads, native disclosures and keyboard access. Verify the deployed files after publication:
 
-After uploading, you can create a GitHub Release with tag `v1.0.0` and title `PM₂.₅ Health Benefits 1.0.0`. The `VERSION` file does not create a Git tag. Future releases keep the filenames `app.js` and `features.js`; commits and tags track revisions.
+- [ ] 四页都能打开 / All four pages load.
+- [ ] 选择中国、2023 年，浓度显示约 **33.1 μg/m³**；下载精度为 **33.115** / China 2023 matches the updated value.
+- [ ] 年龄切换改变死亡结果，浓度不变 / Mortality age selection does not change concentration.
+- [ ] 国家 CSV 包含 `populationWeightedPm25UgM3` / Updated country CSV header.
+- [ ] 手机搜索在地图前，桌面在右侧 / Correct responsive search placement.
+- [ ] Methods 技术细节可展开／收起 / Disclosures work.
+- [ ] 下载、比较和现有分享链接可用 / Downloads, comparisons and shared links work.
+- [ ] 页面与下载文件属于同一提交；若看见旧内容，刷新后重新核对 / Pages and datasets match the release commit.
 
-## 6. 维护与验证 / Maintenance and verification
+## 8. 数据重建与回退 / Rebuild and rollback
 
-本目录包含网站源文件和预生成数据，不包含健康模型或依赖旧目录的构建脚本。页面可以直接修改；更新科学数据时，仍需在原研究工作流中重新生成和验证结果，再替换对应资源。静态部署不代表完整研究流程已随仓库发布。
+浓度重建脚本需要原研究 NetCDF 输入及带 NetCDF 后端的 Python、numpy、xarray 环境。以下命令适用于本地目录布局；GitHub 部署不运行它。
 
-This directory contains website source files and precomputed data, not the health model or build scripts that depend on the earlier research directories. Edit the pages directly. Scientific data updates still require regeneration and validation in the original research workflow before replacing the corresponding assets. A static deployment is not the complete research pipeline.
+The rebuild script requires original research NetCDF inputs and Python with numpy, xarray and a NetCDF backend. It is not part of Pages deployment.
 
-可用 Node.js 检查脚本语法 / Optional JavaScript syntax checks with Node.js:
-
-```bash
-node --check app.js
-node --check features.js
-node --check site.js
+```powershell
+python tools/rebuild_population_pm25.py --inputs ../web_demo_version2
 ```
 
-发布前后检查四页导航、地图、年龄分组、城市窗口、年份切换、四地点比较、CSV 下载、手机布局及页面返回时的状态保留。当前数据与原网站估计一致，本次整理没有重新计算死亡结果。
+回退应通过新提交恢复旧版本文件，保留历史。若本次更新是单独一个提交，可在核实后使用 `git revert <update-commit>`；若跨多个提交，要将页面、脚本、数据及 CSV 一起恢复，并重新部署。删除 Release 不会自动回退 Pages。修改 `VERSION` 也不会恢复数据。
 
-Before and after publication, check all four pages, the map, age groups, city footprints, year changes, four-location comparisons, CSV downloads, mobile layout and state restoration when returning to Explore. Existing health estimates are preserved; this release preparation does not recalculate mortality.
-
-
-## 本轮上线说明 / Deployment notes for this update
-
-目标地址 / Target: https://yifeiiii0129.github.io/PM2.5/
-
-本轮已按此地址配置四页 canonical、Open Graph 和分享图片。大小写必须保持 `PM2.5`。首页筛选参数仍可分享，但 canonical 不包含筛选参数。
-The four pages use this base URL for canonical and Open Graph metadata. Preserve the `PM2.5` capitalization. Explore filter URLs remain shareable; canonical URLs omit filters.
-
-### 上传 / Upload
-
-1. 打开 GitHub 的 `yifeiiii0129/PM2.5` 仓库，确认当前 Pages 发布分支和目录。
-   Open `yifeiiii0129/PM2.5` and check the Pages publishing branch and folder.
-2. 将本目录的内容上传到发布目录，与现有 `index.html` 同级；不要再套一层 `pm25_v1`。保留现有 Git 历史。
-   Upload this directory's contents into the publishing folder, alongside `index.html`, without an extra `pm25_v1` wrapper. Preserve Git history.
-3. 本轮更新：`index.html`, `methods.html`, `data.html`, `about.html`, `app.js`, `site.css`, `README.md`；新增：`assets/favicon.svg`, `assets/share-preview.png`。其他数据文件没有修改，已有同版本数据时无需重复上传。
-   These are the changed/new files. Scientific datasets are unchanged and do not need re-uploading if the deployed copies already match.
-4. 部署完成后检查四页、搜索错误提示、分享图片 URL，以及原有筛选链接。网站本轮尚未由本地工具发布。
-   After deployment, verify all four pages, search feedback, the share-image URL and existing filter URLs. This local update has not been published by the tools.
-
-### 性能核查 / Performance check
-
-旧版目标站点两个大文件已返回 `Content-Encoding: gzip` 和 `Cache-Control: max-age=600`：结果数据 2,477,184 bytes，地图边界 5,274,092 bytes，合计约 7.75 MB。这是现有线上资源的响应头，不是新版发布后的测速。本轮没有声称缩短首屏时间；按年份加载仍是下一项独立优化。
-The existing live resources already return gzip encoding and a 600-second cache lifetime: 2,477,184 bytes for results and 5,274,092 bytes for boundaries, approximately 7.75 MB combined. These are response headers for the existing deployment, not a speed measurement of this update. No first-load speed improvement is claimed in this patch; loading data by year remains a separate next step.
-
-上线后重新检查 `Content-Encoding`、`Cache-Control`、浏览器 Network 中的传输体积和首次可交互时间。不要仅上传 `.gz` 文件就认为已启用压缩。
-After deployment, recheck encoding/cache headers, transferred bytes and time until the map can be used. Uploading a `.gz` file alone does not configure HTTP compression.
-
-参考 / Reference: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Compression
-分享字段 / Sharing metadata: https://ogp.me/
+Restore an earlier version through a new commit. For an isolated update commit, `git revert <update-commit>` can reverse it after review. Multi-commit updates require restoring a consistent set of pages, scripts and data. Deleting a Release or editing `VERSION` does not roll back the deployed site.

@@ -13,6 +13,27 @@
       toggle.focus();
     }
   });
+  // Move the same controls so their values, listeners and IDs stay intact.
+  const picker = document.querySelector('.picker-panel');
+  const mobileSearch = document.querySelector('#mobileLocationSearch');
+  if (picker && mobileSearch) {
+    const home = document.createComment('Location controls return here on desktop');
+    picker.before(home);
+    const compact = window.matchMedia('(max-width: 980px)');
+    const placeSearch = () => {
+      const focused = picker.contains(document.activeElement) ? document.activeElement : null;
+      if (compact.matches) {
+        mobileSearch.hidden = false;
+        mobileSearch.append(picker);
+      } else {
+        home.after(picker);
+        mobileSearch.hidden = true;
+      }
+      focused?.focus({ preventScroll: true });
+    };
+    placeSearch();
+    compact.addEventListener('change', placeSearch);
+  }
   // Keep the last selected location when returning from a static page.
   try {
     const saved = sessionStorage.getItem('pm25-health-explore-url');
